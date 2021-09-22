@@ -15,4 +15,10 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
-    covr
+    covr,
+    testthat (>= 3.0.0)
+Imports: 
+    survey,
+    RcppTOML,
+    srvyr
+Config/testthat/edition: 3
