@@ -36,3 +36,9 @@ interpolate <- function (code, ..., comment = character(), `_env` = parent.frame
     attr(res, "code") <- c(comment, capture.output(expr))
     res
 }
+
+orNULL <- function (x, y = x) {
+    if (is.null(x))
+        NULL
+    else y
+}
