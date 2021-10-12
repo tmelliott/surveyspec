@@ -5,6 +5,11 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/tmelliott/surveyspec/workflows/R-CMD-check/badge.svg)](https://github.com/tmelliott/surveyspec/actions)
+
+[![Codecov test
+coverage](https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg)](https://codecov.io/gh/tmelliott/surveyspec?branch=main)
+
 <!-- badges: end -->
 
 The goal of surveyspec is to …
@@ -21,8 +26,8 @@ install.packages("surveyspec")
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("tmelliott/surveyspec")
+# install.packages("remotes")
+remotes::install_github("tmelliott/surveyspec")
 ```
 
 ## Example
