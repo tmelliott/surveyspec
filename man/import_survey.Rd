@@ -12,6 +12,8 @@ import_survey(file, data, read_fun)
 \item{data}{optional, if supplied the survey object will be created with the supplied data.
 Can be either a data.frame-like object, or a path to a data set which
 will be imported using \code{iNZightTools::smart_read}.}
+
+\item{read_fun}{function required to load the data specified in \code{file}}
 }
 \value{
 a \code{inzsvyspec} object containing the design parameters and, if data supplied,

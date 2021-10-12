@@ -40,7 +40,7 @@ make_survey <- function(.data, spec) {
             s$rscales <- NULL
         } else {
             if (all(diff(s$rscales) == 0)) s$rscales <- s$rscales[1]
-            s$rscales <- paste(capture.output(dput(s$rscales)), collapse = "")
+            s$rscales <- paste(utils::capture.output(dput(s$rscales)), collapse = "")
         }
         s$type <- s$reptype
         s$reptype <- NULL

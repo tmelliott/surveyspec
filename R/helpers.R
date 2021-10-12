@@ -5,7 +5,7 @@ replaceVars <- function (exp, ...) {
         exp_str <- gsub(names(sub_list)[i], sub_list[i], exp_str,
             fixed = TRUE)
     }
-    exp <- as.formula(paste(exp_str, collapse = " "))
+    exp <- stats::as.formula(paste(exp_str, collapse = " "))
     exp
 }
 
@@ -33,7 +33,7 @@ interpolate <- function (code, ..., comment = character(), `_env` = parent.frame
     res <- eval(expr, `_env`)
     if (length(comment) > 0)
         comment <- paste("##", comment)
-    attr(res, "code") <- c(comment, capture.output(expr))
+    attr(res, "code") <- c(comment, utils::capture.output(expr))
     res
 }
 
