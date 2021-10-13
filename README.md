@@ -72,6 +72,7 @@ dclus2_spec
 #> 2 - level Cluster Sampling design
 #> With (40, 126) clusters.
 #> survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)
+
 dclus2_spec$design
 #> 2 - level Cluster Sampling design
 #> With (40, 126) clusters.
