@@ -177,7 +177,8 @@ test_that("Survey designs can be parsed as survey spec", {
             strata = NULL,
             fpc = "fpc1 + fpc2",
             nest = NULL,
-            weights = "pw"
+            weights = "pw",
+            type = "survey"
         )
     )
 })
