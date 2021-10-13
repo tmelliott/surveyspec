@@ -21,7 +21,8 @@ as_survey_spec.survey.design <- function(x) {
             strata = get_arg(x, "strata"),
             fpc = get_arg(x, "fpc"),
             nest = get_arg(x, "nest"),
-            weights = get_arg(x, "weights")
+            weights = get_arg(x, "weights"),
+            type = "survey"
         ),
         data = x$variables,
         design = x
