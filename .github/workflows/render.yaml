@@ -1,10 +1,10 @@
 on: push
 
-name: Render README
+name: Render
 
 jobs:
   render:
-    name: Render README
+    name: Render
     runs-on: macOS-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
