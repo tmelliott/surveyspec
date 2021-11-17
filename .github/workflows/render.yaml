@@ -14,16 +14,22 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
       - name: Install rmarkdown, remotes, and the local package
         run: |
-          install.packages(c("remotes", "rmarkdown"))
+          install.packages(c("remotes", "rmarkdown", "roxygen2", "pkgdown"))
           remotes::install_local(".")
           remotes::install_github("iNZightVIT/iNZightTools@feature/outsource-survey-spec")
         shell: Rscript {0}
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
+      - name: Update Documentation
+        run: Rscript -e 'roxygen2::roxygenise()'
+      - name: Build Site
+        run: Rscript -e 'pkgdown::build_site()'
       - name: Commit results
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add man/figures || echo "No figures to add"
-          git commit README.md -m 'Re-build README.Rmd' || echo "No changes to commit"
+          git add man/*.Rd || echo "No documentation to add"
+          git add docs/** || echo "No site changes to add"
+          git commit README.md -m 'Re-build README.Rmd, update docs and site' || echo "No changes to commit"
           git push origin || echo "No changes to commit"

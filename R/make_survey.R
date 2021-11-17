@@ -7,19 +7,19 @@ make_survey <- function(.data, spec) {
     mc <- match.call()
     dataname <- mc$.data
 
-    type <- spec$spec$type
+    type <- spec$spec$survey_type
     exp <- switch(type,
         "replicate" = ~survey::svrepdesign(terms, data = .data),
         "survey" = ~survey::svydesign(terms, data = .data)
     )
 
     s <- spec$spec
-    s$type <- NULL
+    s$survey_type <- NULL
     fmla_args <- c("ids", "probs", "strata", "fpc", "weights")
     str_args <- c("type")
 
     if (type == "replicate") {
-        s <- s[names(s) %in% c("weights", "repweights", "reptype", "scale", "rscales")]
+        s <- s[names(s) %in% c("weights", "repweights", "type", "scale", "rscales")]
         if (is.character(s$repweights) && length(s$repweights) > 1L)
             s$repweights <- paste(s$repweights, collapse = " + ")
         # is repweights a formula or string?
@@ -37,8 +37,6 @@ make_survey <- function(.data, spec) {
             if (all(diff(s$rscales) == 0)) s$rscales <- s$rscales[1]
             s$rscales <- paste(utils::capture.output(dput(s$rscales)), collapse = "")
         }
-        s$type <- s$reptype
-        s$reptype <- NULL
     }
 
     if (type == "survey") {

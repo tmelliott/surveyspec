@@ -31,6 +31,66 @@
 #'
 #' `import_survey` calls `make_survey` when data is provided.
 #'
+#' @section Specification format:
+#'
+#' The survey design specification file used by 'surveyspec' should be in
+#' [TOML](https://github.com/toml-lang/toml) format.
+#' This allows for a very human-readable syntax,
+#' ```
+#' arg = "value"
+#' ```
+#' and additionally some additional complexity where needed (for example when specifying
+#' calibration information).
+#'
+#' For stratified and clustering samples, each argument to `survey::svydesign` can be
+#' given on its own line. So for a stratified sample using the `apistrat` data from the
+#' 'survey' package, the following specification would suffice:
+#' ```
+#' strata = "stype"
+#' weights = "pw"
+#' fpc = "fpc"
+#' ```
+#' For a cluster sample, we instead can provide either `clusters` or `ids` (the former
+#' makes it more obvious to beginners, while the latter is consistent with `svydesign()`).
+#' For example, specifying the design for the `apiclus2` data:
+#' ```
+#' clusters = "dnum + snum"
+#' fpc = "fpc1 + fpc2"
+#' ```
+#'
+#' Alternatively, survey data may be distributed with replicate weights.
+#' To specify this information to `import_survey()`, the same concept is used
+#' but the arguments supplied should be based off those used in `survey::svrepdesign()`.
+#' For example (taken from `?svrepdesign`):
+#' ```
+#' weights = "pw"
+#' repweights = "wt[1-9]+"
+#' type = "JK1"
+#' scale = "~(1-15/757)*14/15"
+#' combined = FALSE
+#' ```
+#' Note here that you can specify an expression for `scale`, but need to use
+#' this syntax, "~expr", for it to be parsed correctly.
+#'
+#' Finally, survey design calibration can be performed by including this information
+#' using TOML list syntax. For example, to calibrate the 'apistrat' data,
+#' ```
+#' strata = "stype"
+#' weights = "pw"
+#' fpc = "fpc"
+#'
+#' [calibrate.stype]
+#' E = 4421
+#' H = 755
+#' M = 1018
+#'
+#' [calibrate."sch.wide"]
+#' "No" = 1072
+#' "Yes" = 5122
+#' ```
+#' Note importantly the use of quotes around variable names which include a period (.),
+#' here `sch.wide`. Currently, only calibrating by a factor is possible.
+#'
 #' @param file the file containing survey information (see Details)
 #' @param data optional, if supplied the survey object will be created with the supplied data.
 #'        Can be either a data.frame-like object, or a path to a data set which
@@ -38,11 +98,27 @@
 #' @param read_fun function required to load the data specified in `file`
 #' @param ... additional arguments to `read_fun`
 #' @return a `inzsvyspec` object containing the design parameters and, if data supplied,
-#'         the created survey object
-#' @author Tom Elliott
+#'         the created survey object. The object is a list containing at least a 'spec'
+#'         component, and if `data` is supplied then also 'data' and 'design' components.
 #' @describeIn import_survey Import survey information from a file
 #' @export
 #' @md
+#' @examples
+#' library(survey)
+#' data(api)
+#' dstrat <- svydesign(ids = ~1, strata = ~stype, weights = ~pw,
+#'  fpc = ~fpc, data = apistrat)
+#'
+#' f <- tempfile(fileext = ".svydesign")
+#' write_spec(dstrat, f)
+#'
+#' cat(readLines(f), sep = "\n")
+#'
+#' (spec <- import_survey(f))
+#' (svy <- make_survey(apistrat, spec))
+#'
+#' # or all in one:
+#' (svy <- import_survey(f, data = apistrat))
 import_survey <- function(file, data, read_fun, ...) {
     # spec <- as.data.frame(read.dcf(file), stringsAsFactors = FALSE)
     spec <- RcppTOML::parseTOML(file)
@@ -61,21 +137,24 @@ import_survey <- function(file, data, read_fun, ...) {
                 nest = spec$nest,
                 weights = spec$weights,
                 repweights = spec$repweights,
-                reptype = spec$reptype,
+                type = spec$type,
                 scale =
-                    if (is.null(spec$reptype) || spec$reptype %in% c(no_scale_types)) {
+                    if (is.null(spec$type) || spec$type %in% c(no_scale_types)) {
                         NULL
+                    } else if (!is.null(spec$scale) && is.character(spec$scale) &&
+                                grepl("^~", spec$scale)) {
+                        eval(parse(text = gsub("^~", "", spec$scale)))
                     } else {
                         spec$scale
                     },
                 rscales =
-                    if (is.null(spec$reptype) || spec$reptype %in% c(no_scale_types)) {
+                    if (is.null(spec$type) || spec$type %in% c(no_scale_types)) {
                         NULL
                     } else {
                         as.numeric(spec$rscales)
                     },
                 ## this will become conditional on what fields are specified
-                type = ifelse("repweights" %in% names(spec), "replicate", "survey"),
+                survey_type = ifelse("repweights" %in% names(spec), "replicate", "survey"),
                 calibrate = spec$calibrate
             )
         ),

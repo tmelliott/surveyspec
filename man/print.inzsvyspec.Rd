@@ -11,9 +11,9 @@
 
 \item{...}{additional arguments, ignored}
 }
+\value{
+Called for the side-effect of printing to the console.
+}
 \description{
 Print iNZight Survey Spec
-}
-\author{
-Tom Elliott
 }

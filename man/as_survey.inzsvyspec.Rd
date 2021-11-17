@@ -13,7 +13,7 @@
 \item{...}{additional arguments, ignored}
 }
 \value{
-a survey design object
+a survey design object of class 'tbl_svy' (from 'srvyr')
 }
 \description{
 Coerce an object to a survey design by extracting the survey object

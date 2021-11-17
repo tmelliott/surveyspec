@@ -13,7 +13,7 @@ as_survey_spec(x)
 \item{x}{an object which can be converted to a survey spec (e.g., survey.design)}
 }
 \value{
-an \code{inzsvydesign} file
+an \code{inzsvydesign} object, see \link{import_survey}
 }
 \description{
 Parse survey to survey spec
@@ -23,6 +23,3 @@ Parse survey to survey spec
 \item \code{survey.design}: Method for survey.design objects
 }}
 
-\author{
-Tom Elliott
-}

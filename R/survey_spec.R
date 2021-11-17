@@ -1,8 +1,7 @@
 #' Parse survey to survey spec
 #'
 #' @param x an object which can be converted to a survey spec (e.g., survey.design)
-#' @return an `inzsvydesign` file
-#' @author Tom Elliott
+#' @return an `inzsvydesign` object, see [import_survey]
 #' @md
 #' @export
 as_survey_spec <- function(x) UseMethod("as_survey_spec")
@@ -45,7 +44,7 @@ NULL
 #'
 #' @param .data an `inzsvyspec` object
 #' @param ... additional arguments, ignored
-#' @return a survey design object
+#' @return a survey design object of class 'tbl_svy' (from 'srvyr')
 #' @export
 #' @md
 as_survey.inzsvyspec <- function(.data, ...) {
@@ -56,7 +55,7 @@ as_survey.inzsvyspec <- function(.data, ...) {
 #'
 #' @param x a `inzsvyspec` object
 #' @param ... additional arguments, ignored
-#' @author Tom Elliott
+#' @return Called for the side-effect of printing to the console.
 #' @md
 #' @export
 print.inzsvyspec <- function(x, ...) {

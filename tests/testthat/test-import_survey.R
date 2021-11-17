@@ -101,8 +101,8 @@ test_that("Replicate weight designs", {
     svytoml <-
 'repweights = "rakedw[1-9]"
 weights = "rakedw0"
-reptype = "other"
-scale = 1
+type = "other"
+scale = "~2/1 - 1"
 rscales = 1
 '
     writeLines(svytoml, svyfile)
@@ -110,9 +110,9 @@ rscales = 1
     dchis <- svrepdesign(
         weights = ~rakedw0,
         repweights = "rakedw[1-9]",
+        type = "other",
         scale = 1,
         rscales = 1,
-        type = "other",
         data = data
     )
 

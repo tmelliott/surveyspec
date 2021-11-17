@@ -163,7 +163,8 @@ will be imported using <code><a href='https://rdrr.io/pkg/iNZightTools/man/smart
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>inzsvyspec</code> object containing the design parameters and, if data supplied,
-the created survey object</p>
+the created survey object. The object is a list containing at least a 'spec'
+component, and if <code>data</code> is supplied then also 'data' and 'design' components.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For replicate weight designs, vectors (if necessary) are declared with
@@ -190,10 +191,123 @@ multiple datasets with the same design, for example.</p>
 <li><p><code>import_survey</code>: Import survey information from a file</p></li>
 <li><p><code>make_survey</code>: Construct a survey object from a data set and an <code>inzsvyspec</code> object</p></li>
 </ul>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <h2 class="hasAnchor" id="specification-format"><a class="anchor" href="#specification-format"></a>Specification format</h2>
 
-    <p>Tom Elliott</p>
+    
 
+
+<p>The survey design specification file used by 'surveyspec' should be in
+<a href='https://github.com/toml-lang/toml'>TOML</a> format.
+This allows for a very human-readable syntax,</p><pre><span class='va'>arg</span> <span class='op'>=</span> <span class='st'>"value"</span>
+</pre>
+
+<p>and additionally some additional complexity where needed (for example when specifying
+calibration information).</p>
+<p>For stratified and clustering samples, each argument to <code><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>survey::svydesign</a></code> can be
+given on its own line. So for a stratified sample using the <code>apistrat</code> data from the
+'survey' package, the following specification would suffice:</p><pre><span class='va'>strata</span> <span class='op'>=</span> <span class='st'>"stype"</span>
+<span class='va'>weights</span> <span class='op'>=</span> <span class='st'>"pw"</span>
+<span class='va'>fpc</span> <span class='op'>=</span> <span class='st'>"fpc"</span>
+</pre>
+
+<p>For a cluster sample, we instead can provide either <code>clusters</code> or <code>ids</code> (the former
+makes it more obvious to beginners, while the latter is consistent with <code><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign()</a></code>).
+For example, specifying the design for the <code>apiclus2</code> data:</p><pre><span class='va'>clusters</span> <span class='op'>=</span> <span class='st'>"dnum + snum"</span>
+<span class='va'>fpc</span> <span class='op'>=</span> <span class='st'>"fpc1 + fpc2"</span>
+</pre>
+
+<p>Alternatively, survey data may be distributed with replicate weights.
+To specify this information to <code>import_survey()</code>, the same concept is used
+but the arguments supplied should be based off those used in <code><a href='https://rdrr.io/pkg/survey/man/svrepdesign.html'>survey::svrepdesign()</a></code>.
+For example (taken from <code><a href='https://rdrr.io/pkg/survey/man/svrepdesign.html'>?svrepdesign</a></code>):</p><pre><span class='va'>weights</span> <span class='op'>=</span> <span class='st'>"pw"</span>
+<span class='va'>repweights</span> <span class='op'>=</span> <span class='st'>"wt[1-9]+"</span>
+<span class='va'>type</span> <span class='op'>=</span> <span class='st'>"JK1"</span>
+<span class='va'>scale</span> <span class='op'>=</span> <span class='st'>"~(1-15/757)*14/15"</span>
+<span class='va'>combined</span> <span class='op'>=</span> <span class='cn'>FALSE</span>
+</pre>
+
+<p>Note here that you can specify an expression for <code>scale</code>, but need to use
+this syntax, "~expr", for it to be parsed correctly.</p>
+<p>Finally, survey design calibration can be performed by including this information
+using TOML list syntax. For example, to calibrate the 'apistrat' data,</p><pre>strata = "stype"
+weights = "pw"
+fpc = "fpc"
+
+[calibrate.stype]
+E = 4421
+H = 755
+M = 1018
+
+[calibrate."sch.wide"]
+"No" = 1072
+"Yes" = 5122
+</pre>
+
+<p>Note importantly the use of quotes around variable names which include a period (.),
+here <code>sch.wide</code>. Currently, only calibrating by a factor is possible.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-survey.r-forge.r-project.org/survey/'>survey</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: grid</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: Matrix</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: survival</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘survey’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:graphics’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     dotchart</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>api</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dstrat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span><span class='op'>(</span>ids <span class='op'>=</span> <span class='op'>~</span><span class='fl'>1</span>, strata <span class='op'>=</span> <span class='op'>~</span><span class='va'>stype</span>, weights <span class='op'>=</span> <span class='op'>~</span><span class='va'>pw</span>,</span>
+<span class='r-in'> fpc <span class='op'>=</span> <span class='op'>~</span><span class='va'>fpc</span>, data <span class='op'>=</span> <span class='va'>apistrat</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".svydesign"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='write_spec.html'>write_spec</a></span><span class='op'>(</span><span class='va'>dstrat</span>, <span class='va'>f</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> strata = "stype"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> fpc = "fpc"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> weights = "pw"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> type = "survey"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>spec</span> <span class='op'>&lt;-</span> <span class='fu'>import_survey</span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Survey design specification:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * ids: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * strata: stype</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * fpc: fpc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * weights: pw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * survey_type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Design object: empty</span>
+<span class='r-in'><span class='op'>(</span><span class='va'>svy</span> <span class='op'>&lt;-</span> <span class='fu'>make_survey</span><span class='op'>(</span><span class='va'>apistrat</span>, <span class='va'>spec</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Survey design specification:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * ids: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * strata: stype</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * fpc: fpc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * weights: pw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * survey_type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Design object: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Stratified Independent Sampling design</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> survey::svydesign(ids = ~1, strata = ~stype, fpc = ~fpc, weights = ~pw, </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     data = apistrat)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># or all in one:</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>svy</span> <span class='op'>&lt;-</span> <span class='fu'>import_survey</span><span class='op'>(</span><span class='va'>f</span>, data <span class='op'>=</span> <span class='va'>apistrat</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Survey design specification:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * ids: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * strata: stype</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * fpc: fpc</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * weights: pw</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  * survey_type: survey</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Design object: </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Stratified Independent Sampling design</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> survey::svydesign(ids = ~1, strata = ~stype, fpc = ~fpc, weights = ~pw, </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     data = data)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

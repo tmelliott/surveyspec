@@ -13,6 +13,7 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 [![CRAN](https://www.r-pkg.org/badges/version/surveyspec)](https://CRAN.R-project.org/package=surveyspec)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+
 <!-- badges: end -->
 
 The ‘surveyspec’ package is designed to make it a little easier for
@@ -26,14 +27,13 @@ to invalid conclusions.
 
 ## Installation
 
-You can install the released version of surveyspec from
-[CRAN](https://CRAN.R-project.org) with:
+<!-- You can install the released version of surveyspec from [CRAN](https://CRAN.R-project.org) with:
 
-``` r
+```r
 install.packages("surveyspec")
-```
+``` -->
 
-And the development version from [GitHub](https://github.com/) with:
+The development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes")
@@ -80,6 +80,7 @@ dclus2_spec
 #>  * ids: dnum + snum
 #>  * fpc: fpc1 + fpc2
 #>  * type: survey
+#>  * survey_type: survey
 #> 
 #> Design object: 
 #> 2 - level Cluster Sampling design
