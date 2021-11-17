@@ -65,6 +65,28 @@ fpc = "fpc1 + fpc2"
     expect_equal(s2, s3, ignore_formula_env = TRUE)
 })
 
+test_that("Survey spec with data imported OK", {
+    datfile <- tempfile("apiclus2", fileext = ".rds")
+    on.exit(unlink(datfile))
+
+    svyfile <- tempfile("apiclus2", fileext = ".svydesign")
+    on.exit(unlink(svyfile), add = TRUE)
+
+    svytoml <- sprintf(
+'ids = "dnum + snum"
+weights = "pw"
+fpc = "fpc1 + fpc2"
+data = "%s"
+', basename(datfile))
+
+    saveRDS(apiclus2, file = datfile)
+    writeLines(svytoml, svyfile)
+
+    s <- import_survey(svyfile, read_fun = readRDS)
+    expect_equal(s$data, apiclus2)
+    expect_s3_class(s$design, "survey.design")
+})
+
 test_that("Replicate weight designs", {
     skip_if_offline()
     skip_on_cran()
