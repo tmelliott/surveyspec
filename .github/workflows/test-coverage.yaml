@@ -60,6 +60,7 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
+          remotes::install_local(".")
           remotes::install_github("iNZightVIT/iNZightTools@feature/outsource-survey-spec")
         shell: Rscript {0}
 
