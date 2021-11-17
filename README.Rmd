@@ -19,7 +19,9 @@ knitr::opts_chunk$set(
 
 [![R-CMD-check](https://github.com/tmelliott/surveyspec/workflows/R-CMD-check/badge.svg)](https://github.com/tmelliott/surveyspec/actions)
 [![Codecov test coverage](https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg)](https://codecov.io/gh/tmelliott/surveyspec?branch=main)
-
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![CRAN](https://www.r-pkg.org/badges/version/surveyspec)](https://CRAN.R-project.org/package=surveyspec)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The 'surveyspec' package is designed to make it a little easier for users to work with survey data in R---particularly those new to working with survey designs. This is done by providing a set of helper functions that allow survey data to be accompanied by a specification file which includes information about stratification, clustering, and so on. This way, there is less chance for surveys to be incorrectly specified to R, which can result in incorrect uncertainty estimates, potentially leading to invalid conclusions.
