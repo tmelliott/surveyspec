@@ -29,12 +29,13 @@
 #'        Can be either a data.frame-like object, or a path to a data set which
 #'        will be imported using `iNZightTools::smart_read`.
 #' @param read_fun function required to load the data specified in `file`
+#' @param ... additional arguments to `read_fun`
 #' @return a `inzsvyspec` object containing the design parameters and, if data supplied,
 #'         the created survey object
 #' @author Tom Elliott
 #' @export
 #' @md
-import_survey <- function(file, data, read_fun) {
+import_survey <- function(file, data, read_fun, ...) {
     # spec <- as.data.frame(read.dcf(file), stringsAsFactors = FALSE)
     spec <- RcppTOML::parseTOML(file)
 
@@ -85,12 +86,16 @@ import_survey <- function(file, data, read_fun) {
     if (!missing(data) && !is.null(data) && is.character(data)) {
         if (file.exists(data) || grepl("^https?://", data)) {
             if (missing(read_fun)) {
-                warning(
-                    sprintf("Please specify a function to read `%s`", data)
-                )
-            } else {
-                data <- read_fun(data)
+                if (requireNamespace("iNZightTools", quietly = TRUE))
+                    read_fun <- iNZightTools::smart_read
+                else {
+                    read_fun <- NULL
+                    warning(
+                        sprintf("Please specify a function to read `%s`", data)
+                    )
+                }
             }
+            if (!is.null(read_fun)) data <- read_fun(data, ...)
         }
     }
 

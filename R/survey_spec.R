@@ -49,7 +49,7 @@ NULL
 #' @export
 #' @md
 as_survey.inzsvyspec <- function(.data, ...) {
-    .data$design
+    srvyr::as_survey(.data$design)
 }
 
 #' Print iNZight Survey Spec

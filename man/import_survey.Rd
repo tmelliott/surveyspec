@@ -4,7 +4,7 @@
 \alias{import_survey}
 \title{Import survey information from a file}
 \usage{
-import_survey(file, data, read_fun)
+import_survey(file, data, read_fun, ...)
 }
 \arguments{
 \item{file}{the file containing survey information (see Details)}
@@ -14,6 +14,8 @@ Can be either a data.frame-like object, or a path to a data set which
 will be imported using \code{iNZightTools::smart_read}.}
 
 \item{read_fun}{function required to load the data specified in \code{file}}
+
+\item{...}{additional arguments to \code{read_fun}}
 }
 \value{
 a \code{inzsvyspec} object containing the design parameters and, if data supplied,

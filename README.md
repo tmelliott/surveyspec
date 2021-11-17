@@ -11,7 +11,14 @@ coverage](https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg
 
 <!-- badges: end -->
 
-The goal of surveyspec is to …
+The ‘surveyspec’ package is designed to make it a little easier for
+users to work with survey data in R—particularly those new to working
+with survey designs. This is done by providing a set of helper functions
+that allow survey data to be accompanied by a specification file which
+includes information about stratification, clustering, and so on. This
+way, there is less chance for surveys to be incorrectly specified to R,
+which can result in incorrect uncertainty estimates, potentially leading
+to invalid conclusions.
 
 ## Installation
 
@@ -61,6 +68,8 @@ linked from the survey specification file (see below). Then, to import
 the survey design,
 
 ``` r
+library(surveyspec)
+
 dclus2_spec <- import_survey('apiclus2.svydesign', data = apiclus2)
 dclus2_spec
 #> Survey design specification:
@@ -77,6 +86,11 @@ dclus2_spec$design
 #> 2 - level Cluster Sampling design
 #> With (40, 126) clusters.
 #> survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)
+
+library(survey)
+svymean(~api00, dclus2_spec$design)
+#>         mean     SE
+#> api00 670.81 30.099
 ```
 
 ### Including data with the specification
@@ -91,4 +105,42 @@ file.
 
 ``` r
 spec <- import_survey('somespec.svydesign', read_fun = read.csv)
+```
+
+## Working with other packages
+
+The ‘surveyspec’ package was initially developed as a part of
+[‘iNZightTools’](https://github.com/iNZightVIT/iNZightTools/) but I
+extracted it into its own package to reduce dependencies. However,
+particularly for those new to R, the ‘iNZightTools’ package provides a
+useful data import function which can really make reading survey data
+from a variety of sources easier, including with the addition of
+metadata to describe value types:
+
+``` r
+# install.packages("iNZightTools")
+write.csv(apiclus2, 'apiclus2.csv', quote = FALSE, row.names = FALSE)
+
+# no need to specify `read_fun` if 'iNZightTools' is installed
+dclus2_spec <- import_survey('apiclus2.svydesign', data = 'apiclus2.csv')
+```
+
+Additionally, much of the data manipulation within ‘iNZightTools’ works
+thanks to [‘srvyr’](https://github.com/gergness/srvyr), so of course you
+can work ‘surveyspec’ into your ‘tidyverse’ or ‘dplyr’ workflow:
+
+``` r
+library(dplyr)
+library(srvyr)
+
+import_survey('apiclus2.svydesign', data = 'apiclus2.csv') %>%
+  as_survey() %>%
+  group_by(stype) %>%
+  summarize(mean_api = survey_mean(api00))
+#> # A tibble: 3 × 3
+#>   stype mean_api mean_api_se
+#>   <fct>    <dbl>       <dbl>
+#> 1 E         693.        29.9
+#> 2 H         598.        17.7
+#> 3 M         642.        45.1
 ```
