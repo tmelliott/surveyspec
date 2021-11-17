@@ -149,3 +149,11 @@ import_survey('apiclus2.svydesign', data = 'apiclus2.csv') %>%
 #> 2 H         598.        17.7
 #> 3 M         642.        45.1
 ```
+
+## Acknowledgements
+
+This package has been built as part of [Te Rourou
+Tātaritanga](https://terourou.org), an informatics research project
+looking to improve access to data in Aoteroa, New Zealand and around the
+world. The project is funded by an [MBIE](https://www.mbie.govt.nz/)
+Endeavour Grant, ref 62506 EDNRP.
