@@ -20,9 +20,16 @@
 #' which matches all variables starting with a `w` followed by digits between 0 and 2 (inclusive).
 #'
 #' Additionally, the information can contain a `file` specification
-#' indicating the path to the data, which will be imported using
-#' `iNZightTools::smart_read` if it exists in the same directory
-#' as `file`, or alternatively a URL to a data file that will be downloaded.
+#' indicating the path to the data, which will be imported (if it exists
+#' in the same directory as `file`) using `read_fun`, if specified;
+#' or alternatively `file` can be a URL to a data file that will be downloaded
+#' and read, again using `read_fun`.
+#'
+#' If the data is not specified to `import_survey`, then `make_survey` can be used to manually
+#' construct an `inzsvyspec` object with the design attached. This might be useful if you have
+#' multiple datasets with the same design, for example.
+#'
+#' `import_survey` calls `make_survey` when data is provided.
 #'
 #' @param file the file containing survey information (see Details)
 #' @param data optional, if supplied the survey object will be created with the supplied data.
@@ -33,6 +40,7 @@
 #' @return a `inzsvyspec` object containing the design parameters and, if data supplied,
 #'         the created survey object
 #' @author Tom Elliott
+#' @describeIn import_survey Import survey information from a file
 #' @export
 #' @md
 import_survey <- function(file, data, read_fun, ...) {

@@ -1,11 +1,6 @@
-#' Make a survey object
-#'
-#' Construct a survey object from a data set and an `inzsvyspec` object.
-#'
 #' @param .data a data.frame
 #' @param spec a `inzsvyspec` object
-#' @return a `inzsvyspec` object with the survey design loaded
-#' @author Tom Elliott
+#' @describeIn import_survey Construct a survey object from a data set and an `inzsvyspec` object
 #' @export
 #' @md
 make_survey <- function(.data, spec) {

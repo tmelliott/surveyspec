@@ -1,0 +1,9 @@
+pandoc: 2.9.2.1
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles: {}
+last_built: 2021-11-17T04:08Z
+urls:
+  reference: https://tmelliott.github.io/surveyspec/reference
+  article: https://tmelliott.github.io/surveyspec/articles
+

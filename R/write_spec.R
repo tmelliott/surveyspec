@@ -1,9 +1,11 @@
-#' Write a survey specification file based on a survey design object
+#' Write a survey specification file
+#'
+#' Writes a survey specification file for the given survey design object.
 #'
 #' @param x a survey object
 #' @param file the path of a file to write to
 #' @param data_path the location of the data, relative. Only specify if distributing both, and relative paths will remain consistent.
-#' @return Called for side-effect of writing to a file
+#' @return Called for side-effect of writing to a file.
 #' @export
 write_spec <- function(x, file, data_path) {
     UseMethod("write_spec", x)

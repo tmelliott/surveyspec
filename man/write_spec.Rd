@@ -5,7 +5,7 @@
 \alias{write_spec.default}
 \alias{write_spec.inzsvyspec}
 \alias{write_spec.survey.design}
-\title{Write a survey specification file based on a survey design object}
+\title{Write a survey specification file}
 \usage{
 write_spec(x, file, data_path)
 
@@ -23,8 +23,8 @@ write_spec(x, file, data_path)
 \item{data_path}{the location of the data, relative. Only specify if distributing both, and relative paths will remain consistent.}
 }
 \value{
-Called for side-effect of writing to a file
+Called for side-effect of writing to a file.
 }
 \description{
-Write a survey specification file based on a survey design object
+Writes a survey specification file for the given survey design object.
 }
