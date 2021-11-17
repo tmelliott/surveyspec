@@ -8,7 +8,11 @@
 [![R-CMD-check](https://github.com/tmelliott/surveyspec/workflows/R-CMD-check/badge.svg)](https://github.com/tmelliott/surveyspec/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg)](https://codecov.io/gh/tmelliott/surveyspec?branch=main)
-
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![CRAN](https://www.r-pkg.org/badges/version/surveyspec)](https://CRAN.R-project.org/package=surveyspec)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The ‘surveyspec’ package is designed to make it a little easier for
