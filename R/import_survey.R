@@ -155,7 +155,8 @@ import_survey <- function(file, data, read_fun, ...) {
                     },
                 ## this will become conditional on what fields are specified
                 survey_type = ifelse("repweights" %in% names(spec), "replicate", "survey"),
-                calibrate = spec$calibrate
+                calibrate = spec$calibrate,
+                calfun = if (!is.null(spec$calfun)) spec$calfun else "linear"
             )
         ),
         class = "inzsvyspec"
