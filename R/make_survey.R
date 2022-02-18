@@ -111,9 +111,17 @@ make_survey <- function(.data, spec) {
                 )
                 popn <- eval(parse(text = sprintf("list(%s)", paste(popn, collapse = ", "))))
                 # figure out dimnames ...
-                dimnames(popn[[1]]) <- list(stype = c("E", "H", "M"), comp.imp = c("No", "Yes"))
-                dimnames(popn[[2]]) <- list(stype = c("E", "H", "M"), sch.wide = c("No", "Yes"))
-                print(popn)
+                # --- this only works for categorical variables though
+                dims <- lapply(names(cal),
+                    function(x) {
+                        v <- strsplit(x, split = "+", fixed = TRUE)[[1]]
+                        vl <- lapply(v, function(z) levels(.data[[z]]))
+                        names(vl) <- v
+                        vl
+                    }
+                )
+
+                for (i in seq_along(dims)) dimnames(popn[[i]]) <- dims[[i]]
 
                 cal_exp <- ~survey::calibrate(.design,
                     formula = .FMLA,
