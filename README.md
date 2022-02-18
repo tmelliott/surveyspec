@@ -81,6 +81,7 @@ dclus2_spec
 #>  * fpc: fpc1 + fpc2
 #>  * type: survey
 #>  * survey_type: survey
+#>  * calfun: linear
 #> 
 #> Design object: 
 #> 2 - level Cluster Sampling design
