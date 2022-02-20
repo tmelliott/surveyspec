@@ -249,7 +249,6 @@ population = {E = {No = 885, Yes = 3536}, H = {No = 438, Yes = 317}, M = {No = 3
         calfun = "raking"
     )
 
-    devtools::load_all()
     s <- import_survey(svyfile, apiclus1)
     expect_s3_class(s, "inzsvyspec")
     expect_s3_class(s$design, "survey.design")
