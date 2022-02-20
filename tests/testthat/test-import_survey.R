@@ -225,15 +225,18 @@ weights = "pw"
 fpc = "fpc"
 calfun = "raking"
 
-[calibrate."stype+sch.wide"]
-E = [472, 3949]
-H = [334, 421]
-M = [266, 752]
+[[calibrate]]
+formula = "stype+sch.wide"
+population.E.No = 472
+population.E.Yes = 3949
+population.H.No = 334
+population.H.Yes = 421
+population.M.No = 266
+population.M.Yes = 752
 
-[calibrate."stype+comp.imp"]
-E = [885, 3536]
-H = [438, 317]
-M = [389, 629]
+[[calibrate]]
+formula = "stype+comp.imp"
+population = {E = {No = 885, Yes = 3536}, H = {No = 438, Yes = 317}, M = {No = 389, Yes = 629}}
 '
     writeLines(svyTOML, svyfile)
 
@@ -246,6 +249,7 @@ M = [389, 629]
         calfun = "raking"
     )
 
+    devtools::load_all()
     s <- import_survey(svyfile, apiclus1)
     expect_s3_class(s, "inzsvyspec")
     expect_s3_class(s$design, "survey.design")

@@ -96,32 +96,8 @@ make_survey <- function(.data, spec) {
             },
             "raking" = {
                 # make wo lists: one of formulas, one of data
-                fmla <- lapply(names(cal),
-                    function(x) sprintf("~%s", x))
-                popn <- lapply(cal,
-                    function(x) {
-                        sprintf("as.table(rbind(%s))",
-                            paste(
-                                sprintf("c(%s)",
-                                    sapply(x, paste, collapse = ", ")),
-                                collapse = ", "
-                            )
-                        )
-                    }
-                )
-                popn <- eval(parse(text = sprintf("list(%s)", paste(popn, collapse = ", "))))
-                # figure out dimnames ...
-                # --- this only works for categorical variables though
-                dims <- lapply(names(cal),
-                    function(x) {
-                        v <- strsplit(x, split = "+", fixed = TRUE)[[1]]
-                        vl <- lapply(v, function(z) levels(.data[[z]]))
-                        names(vl) <- v
-                        vl
-                    }
-                )
-
-                for (i in seq_along(dims)) dimnames(popn[[i]]) <- dims[[i]]
+                fmla <- lapply(cal, function(x) sprintf("~%s", x$formula))
+                popn <- lapply(cal, parse_population_table)
 
                 cal_exp <- ~survey::calibrate(.design,
                     formula = .FMLA,
@@ -178,4 +154,15 @@ as_call <- function (x) {
     else {
         stop("Unknown input")
     }
+}
+
+parse_population_table <- function(x) {
+    pop <- do.call(rbind, lapply(x$population, rbind))
+    mode(pop) <- "integer"
+    rownames(pop) <- names(x$population)
+
+    vars <- strsplit(x$formula, "+", fixed = TRUE)[[1]]
+    dimnames(pop) <- structure(dimnames(pop), .Names = vars)
+
+    as.table(pop)
 }
