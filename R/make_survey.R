@@ -98,6 +98,10 @@ make_survey <- function(.data, spec) {
                 # make wo lists: one of formulas, one of data
                 fmla <- lapply(cal, function(x) sprintf("~%s", x$formula))
                 popn <- lapply(cal, parse_population_table)
+                if (length(fmla) == 1L) {
+                    fmla <- fmla[[1]]
+                    popn <- popn[[1]]
+                }
 
                 cal_exp <- ~survey::calibrate(.design,
                     formula = .FMLA,
@@ -105,8 +109,7 @@ make_survey <- function(.data, spec) {
                     calfun = "raking"
                 )
                 cal_exp <- replaceVars(cal_exp,
-                    .FMLA = sprintf("list(%s)", paste(fmla, collapse = ", "))
-                    # .POPN = popn
+                    .FMLA = if (is.list(fmla)) sprintf("list(%s)", paste(fmla, collapse = ", ")) else fmla
                 )
             },
             stop(sprintf("calfun '%s' not supported", spec$spec$calfun))
@@ -157,12 +160,17 @@ as_call <- function (x) {
 }
 
 parse_population_table <- function(x) {
-    pop <- do.call(rbind, lapply(x$population, rbind))
-    mode(pop) <- "integer"
-    rownames(pop) <- names(x$population)
-
     vars <- strsplit(x$formula, "+", fixed = TRUE)[[1]]
-    dimnames(pop) <- structure(dimnames(pop), .Names = vars)
 
-    as.table(pop)
+    if (is.list(x$population)) {
+        pop <- do.call(rbind, lapply(x$population, rbind))
+        mode(pop) <- "integer"
+        rownames(pop) <- names(x$population)
+        dimnames(pop) <- structure(dimnames(pop), .Names = vars)
+        as.table(pop)
+    } else {
+        pop <- x$population
+        names(pop) <- c("(Intercept)", vars)
+        pop
+    }
 }
