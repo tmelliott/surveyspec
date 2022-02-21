@@ -16,7 +16,7 @@ make_survey <- function(.data, spec) {
     s <- spec$spec
     s$survey_type <- NULL
     fmla_args <- c("ids", "probs", "strata", "fpc", "weights")
-    str_args <- c("type")
+    str_args <- c("type", "calfun")
 
     if (type == "replicate") {
         s <- s[names(s) %in% c("weights", "repweights", "type", "scale", "rscales")]
@@ -90,9 +90,6 @@ make_survey <- function(.data, spec) {
                 cal_exp <- replaceVars(cal_exp,
                     .vars = paste(vnames, collapse = " + ")
                 )
-                ifun <- function(e) {
-
-                }
             },
             "raking" = {
                 # make wo lists: one of formulas, one of data
@@ -143,24 +140,8 @@ make_survey <- function(.data, spec) {
     spec
 }
 
-as_call <- function (x) {
-    if (inherits(x, "formula")) {
-        stopifnot(length(x) == 2)
-        x[[2]]
-    }
-    else if (is.list(x)) {
-        x
-    }
-    else if (is.atomic(x) || is.name(x) || is.call(x)) {
-        x
-    }
-    else {
-        stop("Unknown input")
-    }
-}
-
 parse_population_table <- function(x) {
-    vars <- strsplit(x$formula, "+", fixed = TRUE)[[1]]
+    vars <- trimws(strsplit(x$formula, "+", fixed = TRUE)[[1]])
 
     if (is.list(x$population)) {
         pop <- do.call(rbind, lapply(x$population, rbind))
