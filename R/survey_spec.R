@@ -9,6 +9,7 @@ as_survey_spec <- function(x) UseMethod("as_survey_spec")
 #' @describeIn as_survey_spec Method for survey.design objects
 #' @export
 as_survey_spec.survey.design <- function(x) {
+    if (!is.null(x$postStrat)) stop("Converting calibrated surveys not yet supported.")
     get_arg <- function(x, arg) {
         x <- x$call
         orNULL(x[[arg]], as.character(x[[arg]])[2])
