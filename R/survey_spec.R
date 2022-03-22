@@ -13,15 +13,18 @@ as_survey_spec <- function(x, ...) UseMethod("as_survey_spec")
 as_survey_spec.survey.design <- function(x, des, ...) {
     if (!is.null(x$postStrat)) {
         if (missing(des)) stop("Please provide original design object with `des` argument.")
-        svy_orig <- as_survey_spec(des)
+        spec <- as_survey_spec(des)$spec
+        svy_cal <- parse_calibration(x$call)
+        spec$calibrate <- svy_cal$calibrate
+        spec$calfun <- svy_cal$calfun
 
-        cal_list <- as.list(x$call)
-        fmla <- if (!is.null(cal_list$formula)) cal_list$formula else cal_list[[3]]
-        popn <- if (!is.null(cal_list$population)) cal_list$population else cal_list[[4]]
-
-        # return(list(formula = fmla, population = popn))
-        stop("Not supported yet")
-        # return(svy_orig)
+        spec <- list(
+            spec = spec,
+            data = x$variables,
+            design = x
+        )
+        class(spec) <- "inzsvyspec"
+        return(spec)
     }
     get_arg <- function(x, arg) {
         x <- x$call
@@ -96,4 +99,24 @@ print.inzsvyspec <- function(x, ...) {
         cat("\n")
         print(x$design)
     }
+}
+
+parse_calibration <- function(x) {
+    cal_list <- as.list(x)
+    fmla <- if (!is.null(cal_list$formula)) cal_list$formula else cal_list[[3]]
+    popn <- if (!is.null(cal_list$population)) cal_list$population else cal_list[[4]]
+
+    if (is.call(popn)) popn <- eval(popn)
+
+    # need to check if fmla is a list or single formula
+    cal <- list(
+        formula = paste(as.character(fmla)[-1], sep = " + "),
+        population = as.numeric(popn)
+    )
+
+    # should return a list of calibration informations in 'spec' format
+    list(
+        calibrate = list(cal),
+        calfun = if (is.null(x$calfun)) "linear" else x$calfun
+    )
 }

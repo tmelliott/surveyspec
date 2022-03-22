@@ -55,9 +55,10 @@ test_that("Writing post-stratified/calibrated survey specification", {
     f <- tempfile(fileext = ".svydesign")
     on.exit(unlink(f))
 
-    expect_error(
+    expect_silent(
         write_spec(des_cal, f, des = des)
     )
+    # expect_equal(import_survey(f, data), des_cal)
 })
 
 test_that("Errors returned if object not supported", {

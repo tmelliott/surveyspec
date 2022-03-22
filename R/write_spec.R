@@ -24,7 +24,22 @@ write_spec.inzsvyspec <- function(x, file, data_path, ...) {
     spec <- x$spec[!sapply(x$spec, is.null)]
     if (spec$ids == 1) spec$ids <- NULL
 
+    # special form for 'calibrate'
+    cal <- spec$calibrate
+    spec <- spec[names(spec) != "calibrate"]
+
     spec <- paste0(names(spec), " = \"", as.character(spec), "\"", collapse = "\n")
+
+    if (!is.null(cal)) {
+        cal <- sapply(cal, function(c) {
+            s <- sprintf("\n[[calibrate]]\nformula = \"%s\"\npopulation = [%s]",
+                c$formula,
+                paste(c$population, collapse = ", ")
+            )
+        })
+        spec <- paste(c(spec, cal), sep = "\n")
+    }
+
     writeLines(spec, con = file)
 }
 
