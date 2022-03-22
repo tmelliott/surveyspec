@@ -5,12 +5,16 @@
 \alias{as_survey_spec.survey.design}
 \title{Parse survey to survey spec}
 \usage{
-as_survey_spec(x)
+as_survey_spec(x, ...)
 
-\method{as_survey_spec}{survey.design}(x)
+\method{as_survey_spec}{survey.design}(x, des, ...)
 }
 \arguments{
 \item{x}{an object which can be converted to a survey spec (e.g., survey.design)}
+
+\item{...}{additional arguments, used for methods}
+
+\item{des}{a survey design object, needed for calibrated/poststratified surveys}
 }
 \value{
 an \code{inzsvydesign} object, see \link{import_survey}

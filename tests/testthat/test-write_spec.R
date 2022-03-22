@@ -48,7 +48,7 @@ test_that("Writing post-stratified/calibrated survey specification", {
     data <- apiclus1
     des <- svydesign(ids = ~dnum, weights = ~pw,
         data = data, fpc = ~fpc)
-    des <- calibrate(des, ~stype,
+    des_cal <- calibrate(des, ~stype,
         c(`(Intercept)`=6194, stypeH=755, stypeM=1018)
     )
 
@@ -56,8 +56,7 @@ test_that("Writing post-stratified/calibrated survey specification", {
     on.exit(unlink(f))
 
     expect_error(
-        write_spec(des, f),
-        "Converting calibrated surveys not yet supported."
+        write_spec(des_cal, f, des = des)
     )
 })
 

@@ -7,13 +7,13 @@
 \alias{write_spec.survey.design}
 \title{Write a survey specification file}
 \usage{
-write_spec(x, file, data_path)
+write_spec(x, file, data_path, ...)
 
-\method{write_spec}{default}(x, file, data_path)
+\method{write_spec}{default}(x, file, data_path, ...)
 
-\method{write_spec}{inzsvyspec}(x, file, data_path)
+\method{write_spec}{inzsvyspec}(x, file, data_path, ...)
 
-\method{write_spec}{survey.design}(x, file, data_path)
+\method{write_spec}{survey.design}(x, file, data_path, des, ...)
 }
 \arguments{
 \item{x}{a survey object}
@@ -21,6 +21,10 @@ write_spec(x, file, data_path)
 \item{file}{the path of a file to write to}
 
 \item{data_path}{the location of the data, relative. Only specify if distributing both, and relative paths will remain consistent.}
+
+\item{...}{additional arguments for methods}
+
+\item{des}{a survey design object, needed for calibrated/poststratified surveys}
 }
 \value{
 Called for side-effect of writing to a file.

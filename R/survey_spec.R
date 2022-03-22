@@ -1,15 +1,28 @@
 #' Parse survey to survey spec
 #'
 #' @param x an object which can be converted to a survey spec (e.g., survey.design)
+#' @param ... additional arguments, used for methods
 #' @return an `inzsvydesign` object, see [import_survey]
 #' @md
 #' @export
-as_survey_spec <- function(x) UseMethod("as_survey_spec")
+as_survey_spec <- function(x, ...) UseMethod("as_survey_spec")
 
 #' @describeIn as_survey_spec Method for survey.design objects
+#' @param des a survey design object, needed for calibrated/poststratified surveys
 #' @export
-as_survey_spec.survey.design <- function(x) {
-    if (!is.null(x$postStrat)) stop("Converting calibrated surveys not yet supported.")
+as_survey_spec.survey.design <- function(x, des, ...) {
+    if (!is.null(x$postStrat)) {
+        if (missing(des)) stop("Please provide original design object with `des` argument.")
+        svy_orig <- as_survey_spec(des)
+
+        cal_list <- as.list(x$call)
+        fmla <- if (!is.null(cal_list$formula)) cal_list$formula else cal_list[[3]]
+        popn <- if (!is.null(cal_list$population)) cal_list$population else cal_list[[4]]
+
+        # return(list(formula = fmla, population = popn))
+        stop("Not supported yet")
+        # return(svy_orig)
+    }
     get_arg <- function(x, arg) {
         x <- x$call
         orNULL(x[[arg]], as.character(x[[arg]])[2])
