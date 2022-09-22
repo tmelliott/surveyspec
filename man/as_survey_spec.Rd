@@ -24,6 +24,6 @@ Parse survey to survey spec
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{survey.design}: Method for survey.design objects
-}}
+\item \code{as_survey_spec(survey.design)}: Method for survey.design objects
 
+}}
