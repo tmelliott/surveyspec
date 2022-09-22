@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://tomelliott.co.nz/surveyspec/404.html</loc>
+  </url>
+  <url>
+    <loc>https://tomelliott.co.nz/surveyspec/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://tomelliott.co.nz/surveyspec/authors.html</loc>
+  </url>
+  <url>
     <loc>https://tomelliott.co.nz/surveyspec/index.html</loc>
+  </url>
+  <url>
+    <loc>https://tomelliott.co.nz/surveyspec/news/index.html</loc>
   </url>
   <url>
     <loc>https://tomelliott.co.nz/surveyspec/reference/as_survey.inzsvyspec.html</loc>
@@ -11,6 +23,12 @@
   </url>
   <url>
     <loc>https://tomelliott.co.nz/surveyspec/reference/import_survey.html</loc>
+  </url>
+  <url>
+    <loc>https://tomelliott.co.nz/surveyspec/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://tomelliott.co.nz/surveyspec/reference/make_survey.html</loc>
   </url>
   <url>
     <loc>https://tomelliott.co.nz/surveyspec/reference/print.inzsvyspec.html</loc>

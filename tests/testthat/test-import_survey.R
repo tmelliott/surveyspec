@@ -210,3 +210,86 @@ test_that("Survey spec can be converted to survey design (srvyr)", {
     dsvy <- as_survey_spec(dclus2)
     expect_equal(as_survey(dsvy), srvyr::as_survey(dclus2))
 })
+
+## Input in the same format as rake() for classical raking
+library(survey)
+data(api)
+# svymean(~api00+stype, dclus1r)
+# svymean(~api00+stype, gclus1r)
+
+test_that("Raking calibration - multiple tables", {
+    svyfile <- tempfile("apiclus1", fileext = ".svydesign")
+    on.exit(unlink(svyfile))
+    svyTOML <- 'ids = "dnum"
+weights = "pw"
+fpc = "fpc"
+calfun = "raking"
+
+[[calibrate]]
+formula = "stype+sch.wide"
+population.E.No = 472
+population.E.Yes = 3949
+population.H.No = 334
+population.H.Yes = 421
+population.M.No = 266
+population.M.Yes = 752
+
+[[calibrate]]
+formula = "stype+comp.imp"
+population = {E = {No = 885, Yes = 3536}, H = {No = 438, Yes = 317}, M = {No = 389, Yes = 629}}
+'
+    writeLines(svyTOML, svyfile)
+
+    dclus1 <- svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
+    pop.table <- xtabs(~stype + sch.wide, apipop)
+    pop.table2 <- xtabs(~stype + comp.imp, apipop)
+    gclus1r <- calibrate(dclus1,
+        formula = list(~stype + sch.wide, ~stype + comp.imp),
+        population = list(pop.table, pop.table2),
+        calfun = "raking"
+    )
+
+    s <- import_survey(svyfile, apiclus1)
+    expect_s3_class(s, "inzsvyspec")
+    expect_s3_class(s$design, "survey.design")
+    expect_equal(
+        svymean(~api00, design = s$design),
+        svymean(~api00, design = gclus1r)
+    )
+
+    expect_output(print(s), "survey::calibrate")
+})
+
+test_that("Raking calibration - numeric vars", {
+    svyfile <- tempfile("apiclus1", fileext = ".svydesign")
+    on.exit(unlink(svyfile))
+    svyTOML <- 'ids = "dnum"
+weights = "pw"
+fpc = "fpc"
+calfun = "raking"
+
+[[calibrate]]
+formula = "api99"
+population = [6194, 3914069]
+'
+    writeLines(svyTOML, svyfile)
+
+    dclus1 <- svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
+    pop.table <- xtabs(~stype + sch.wide, apipop)
+    pop.table2 <- xtabs(~stype + comp.imp, apipop)
+    gclus1r <- calibrate(dclus1,
+        formula = ~api99,
+        population = c(6194, 3914069),
+        calfun = "raking"
+    )
+
+    s <- import_survey(svyfile, apiclus1)
+    expect_s3_class(s, "inzsvyspec")
+    expect_s3_class(s$design, "survey.design")
+    expect_equal(
+        svymean(~api00, design = s$design),
+        svymean(~api00, design = gclus1r)
+    )
+
+    expect_output(print(s), "survey::calibrate")
+})
