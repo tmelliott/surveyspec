@@ -9,8 +9,8 @@ make_survey <- function(.data, spec) {
 
     type <- spec$spec$survey_type
     exp <- switch(type,
-        "replicate" = ~survey::svrepdesign(terms, data = .data),
-        "survey" = ~survey::svydesign(terms, data = .data)
+        "replicate" = ~ survey::svrepdesign(terms, data = .data),
+        "survey" = ~ survey::svydesign(terms, data = .data)
     )
 
     s <- spec$spec
@@ -20,8 +20,9 @@ make_survey <- function(.data, spec) {
 
     if (type == "replicate") {
         s <- s[names(s) %in% c("weights", "repweights", "type", "scale", "rscales")]
-        if (is.character(s$repweights) && length(s$repweights) > 1L)
+        if (is.character(s$repweights) && length(s$repweights) > 1L) {
             s$repweights <- paste(s$repweights, collapse = " + ")
+        }
         # is repweights a formula or string?
         split <- trimws(strsplit(s$repweights, "+", fixed = TRUE)[[1]])
         if (all(split %in% names(.data))) {
@@ -46,9 +47,11 @@ make_survey <- function(.data, spec) {
     terms <- do.call(
         paste,
         c(
-            lapply(names(s)[!sapply(s, is.null)],
+            lapply(
+                names(s)[!sapply(s, is.null)],
                 function(x) {
-                    sprintf("%s = %s%s%s",
+                    sprintf(
+                        "%s = %s%s%s",
                         x,
                         ifelse(x %in% fmla_args,
                             "~",
@@ -71,8 +74,10 @@ make_survey <- function(.data, spec) {
             "linear" = {
                 # put cal into a more useful format
                 vnames <- names(cal)
-                pop.totals <- do.call(c,
-                    lapply(seq_along(vnames),
+                pop.totals <- do.call(
+                    c,
+                    lapply(
+                        seq_along(vnames),
                         function(i) {
                             x <- cal[[i]]
                             z <- paste0(vnames[[i]], names(x))
@@ -86,7 +91,7 @@ make_survey <- function(.data, spec) {
                     )
                 )
 
-                cal_exp <- ~survey::calibrate(.design, ~.vars, .totals)
+                cal_exp <- ~ survey::calibrate(.design, ~.vars, .totals)
                 cal_exp <- replaceVars(cal_exp,
                     .vars = paste(vnames, collapse = " + ")
                 )
@@ -100,7 +105,7 @@ make_survey <- function(.data, spec) {
                     popn <- popn[[1]]
                 }
 
-                cal_exp <- ~survey::calibrate(.design,
+                cal_exp <- ~ survey::calibrate(.design,
                     formula = .FMLA,
                     population = .POPN,
                     calfun = "raking"
@@ -111,7 +116,6 @@ make_survey <- function(.data, spec) {
             },
             stop(sprintf("calfun '%s' not supported", spec$spec$calfun))
         )
-
     }
 
     spec$data <- .data
@@ -122,11 +126,11 @@ make_survey <- function(.data, spec) {
         design_obj <- spec$design
         spec$design <- switch(spec$spec$calfun,
             "linear" = (function() {
-                    interpolate(cal_exp,
-                        .totals = pop.totals,
-                        .design = ~design_obj
-                    )
-                })(),
+                interpolate(cal_exp,
+                    .totals = pop.totals,
+                    .design = ~design_obj
+                )
+            })(),
             "raking" = {
                 (function() {
                     interpolate(cal_exp,
