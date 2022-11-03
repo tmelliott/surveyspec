@@ -16,7 +16,7 @@ jobs:
         run: |
           install.packages(c("remotes", "rmarkdown", "roxygen2", "pkgdown"))
           remotes::install_local(".")
-          remotes::install_github("iNZightVIT/iNZightTools@feature/outsource-survey-spec")
+          remotes::install_github("iNZightVIT/iNZightTools@dev")
         shell: Rscript {0}
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
