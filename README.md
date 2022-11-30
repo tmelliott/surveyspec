@@ -16,7 +16,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 <!-- badges: end -->
 
-The ‘surveyspec’ package is designed to make it a little easier for
+The **surveyspec** package is designed to make it a little easier for
 users to work with survey data in R—particularly those new to working
 with survey designs. This is done by providing a set of helper functions
 that allow survey data to be accompanied by a specification file which
@@ -42,7 +42,7 @@ remotes::install_github("tmelliott/surveyspec")
 
 ## Example
 
-There are two audiences for ‘surveyspec’, those who collect and
+There are two audiences for **surveyspec**, those who collect and
 distribute survey data, and those who wish to analyse them.
 
 ### Creating a survey specification file
@@ -115,10 +115,10 @@ spec <- import_survey('somespec.svydesign', read_fun = read.csv)
 
 ## Working with other packages
 
-The ‘surveyspec’ package was initially developed as a part of
+The **surveyspec** package was initially developed as a part of
 [‘iNZightTools’](https://github.com/iNZightVIT/iNZightTools/) but I
 extracted it into its own package to reduce dependencies. However,
-particularly for those new to R, the ‘iNZightTools’ package provides a
+particularly for those new to R, the **iNZightTools** package provides a
 useful data import function which can really make reading survey data
 from a variety of sources easier, including with the addition of
 metadata to describe value types:
@@ -131,9 +131,10 @@ write.csv(apiclus2, 'apiclus2.csv', quote = FALSE, row.names = FALSE)
 dclus2_spec <- import_survey('apiclus2.svydesign', data = 'apiclus2.csv')
 ```
 
-Additionally, much of the data manipulation within ‘iNZightTools’ works
-thanks to [‘srvyr’](https://github.com/gergness/srvyr), so of course you
-can work ‘surveyspec’ into your ‘tidyverse’ or ‘dplyr’ workflow:
+Additionally, much of the data manipulation within **iNZightTools**
+works thanks to [**srvyr**](https://github.com/gergness/srvyr), so of
+course you can work **surveyspec** into your **tidyverse** or **dplyr**
+workflow:
 
 ``` r
 library(dplyr)
