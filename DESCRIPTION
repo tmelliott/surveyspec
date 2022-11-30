@@ -1,6 +1,6 @@
 Package: surveyspec
 Title: Survey Design Specification Format
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     person(given = "Tom",
            family = "Elliott",
