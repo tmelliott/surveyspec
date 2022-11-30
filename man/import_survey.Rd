@@ -31,18 +31,24 @@ component, and if \code{data} is supplied then also 'data' and 'design' componen
 }
 \description{
 The survey information should be in TOML format, with fields
-corresponding to survey design components. For example,\preformatted{strata = strata_var
+corresponding to survey design components. For example,
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{strata = strata_var
 clusters = cluster_var
 weights = wt_var
-}
+}\if{html}{\out{</div>}}
 }
 \details{
 For replicate weight designs, vectors (if necessary) are declared with
-square brackets, like so:\preformatted{repweights = ['w01', 'w02', 'w03', 'w04', ..., 'w20']
-}
+square brackets, like so:
 
-although this would be better expressed using a regular expression,\preformatted{repweights = '^w[0-2]'
-}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{repweights = ['w01', 'w02', 'w03', 'w04', ..., 'w20']
+}\if{html}{\out{</div>}}
+
+although this would be better expressed using a regular expression,
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{repweights = '^w[0-2]'
+}\if{html}{\out{</div>}}
 
 which matches all variables starting with a \code{w} followed by digits between 0 and 2 (inclusive).
 
@@ -60,50 +66,60 @@ multiple datasets with the same design, for example.
 }
 \section{Functions}{
 \itemize{
-\item \code{import_survey}: Import survey information from a file
+\item \code{import_survey()}: Import survey information from a file
 
-\item \code{make_survey}: Construct a survey object from a data set and an \code{inzsvyspec} object
+\item \code{make_survey()}: Construct a survey object from a data set and an \code{inzsvyspec} object
+
 }}
-
 \section{Specification format}{
 
 
 The survey design specification file used by 'surveyspec' should be in
 \href{https://github.com/toml-lang/toml}{TOML} format.
-This allows for a very human-readable syntax,\preformatted{arg = "value"
-}
+This allows for a very human-readable syntax,
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{arg = "value"
+}\if{html}{\out{</div>}}
 
 and additionally some additional complexity where needed (for example when specifying
 calibration information).
 
 For stratified and clustering samples, each argument to \code{survey::svydesign} can be
 given on its own line. So for a stratified sample using the \code{apistrat} data from the
-'survey' package, the following specification would suffice:\preformatted{strata = "stype"
+'survey' package, the following specification would suffice:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{strata = "stype"
 weights = "pw"
 fpc = "fpc"
-}
+}\if{html}{\out{</div>}}
 
 For a cluster sample, we instead can provide either \code{clusters} or \code{ids} (the former
 makes it more obvious to beginners, while the latter is consistent with \code{svydesign()}).
-For example, specifying the design for the \code{apiclus2} data:\preformatted{clusters = "dnum + snum"
+For example, specifying the design for the \code{apiclus2} data:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{clusters = "dnum + snum"
 fpc = "fpc1 + fpc2"
-}
+}\if{html}{\out{</div>}}
 
 Alternatively, survey data may be distributed with replicate weights.
 To specify this information to \code{import_survey()}, the same concept is used
 but the arguments supplied should be based off those used in \code{survey::svrepdesign()}.
-For example (taken from \code{?svrepdesign}):\preformatted{weights = "pw"
+For example (taken from \code{?svrepdesign}):
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{weights = "pw"
 repweights = "wt[1-9]+"
 type = "JK1"
 scale = "~(1-15/757)*14/15"
 combined = FALSE
-}
+}\if{html}{\out{</div>}}
 
 Note here that you can specify an expression for \code{scale}, but need to use
 this syntax, "~expr", for it to be parsed correctly.
 
 Finally, survey design calibration can be performed by including this information
-using TOML list syntax. For example, to calibrate the 'apistrat' data,\preformatted{strata = "stype"
+using TOML list syntax. For example, to calibrate the 'apistrat' data,
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{strata = "stype"
 weights = "pw"
 fpc = "fpc"
 
@@ -115,7 +131,7 @@ M = 1018
 [calibrate."sch.wide"]
 "No" = 1072
 "Yes" = 5122
-}
+}\if{html}{\out{</div>}}
 
 Note importantly the use of quotes around variable names which include a period (.),
 here \code{sch.wide}. Currently, only calibrating by a factor is possible.

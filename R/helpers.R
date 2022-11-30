@@ -14,6 +14,9 @@ as_call <- function (x) {
         stopifnot(length(x) == 2)
         x[[2]]
     }
+    else if (is.list(x)) {
+        x
+    }
     else if (is.atomic(x) || is.name(x) || is.call(x)) {
         x
     }

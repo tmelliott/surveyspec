@@ -1,6 +1,6 @@
 Package: surveyspec
 Title: Survey Design Specification Format
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     person(given = "Tom",
            family = "Elliott",
@@ -10,11 +10,11 @@ Authors@R:
 Description: Provides a set of functions for working with design specification files, making it easier to share and load survey designs with R.
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports:
     methods,
+    MASS,
     RcppTOML,
     srvyr (>= 1.1.0),
     stats,

@@ -81,6 +81,7 @@ dclus2_spec
 #>  * fpc: fpc1 + fpc2
 #>  * type: survey
 #>  * survey_type: survey
+#>  * calfun: linear
 #> 
 #> Design object: 
 #> 2 - level Cluster Sampling design
@@ -101,12 +102,12 @@ svymean(~api00, dclus2_spec$design)
 ### Including data with the specification
 
 In many cases, it makes sense to distribute the specification along with
-the data. In this case, the specification file can include a line `data
-= relative/path/to/data.csv`. It is generally advised to place these in
-the same folder, which can be zipped and distributed. Users can then
-extract both files at once into the same directory and get going. To
-load a file with data, you’ll need to specify a function to import the
-file.
+the data. In this case, the specification file can include a line
+`data = relative/path/to/data.csv`. It is generally advised to place
+these in the same folder, which can be zipped and distributed. Users can
+then extract both files at once into the same directory and get going.
+To load a file with data, you’ll need to specify a function to import
+the file.
 
 ``` r
 spec <- import_survey('somespec.svydesign', read_fun = read.csv)

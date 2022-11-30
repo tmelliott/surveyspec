@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">surveyspec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -62,154 +58,167 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="surveyspec" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#surveyspec" class="anchor"></a>surveyspec</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="surveyspec">surveyspec<a class="anchor" aria-label="anchor" href="#surveyspec"></a>
+</h1></div>
 <!-- badges: start -->
 
 <!-- badges: end -->
 <p>The ‘surveyspec’ package is designed to make it a little easier for users to work with survey data in R—particularly those new to working with survey designs. This is done by providing a set of helper functions that allow survey data to be accompanied by a specification file which includes information about stratification, clustering, and so on. This way, there is less chance for surveys to be incorrectly specified to R, which can result in incorrect uncertainty estimates, potentially leading to invalid conclusions.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <!-- You can install the released version of surveyspec from [CRAN](https://CRAN.R-project.org) with:
 
 ```r
 install.packages("surveyspec")
 ``` -->
-<p>The development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>The development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"tmelliott/surveyspec"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tmelliott/surveyspec"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <p>There are two audiences for ‘surveyspec’, those who collect and distribute survey data, and those who wish to analyse them.</p>
-<div id="creating-a-survey-specification-file" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-a-survey-specification-file" class="anchor"></a>Creating a survey specification file</h3>
+<div class="section level3">
+<h3 id="creating-a-survey-specification-file">Creating a survey specification file<a class="anchor" aria-label="anchor" href="#creating-a-survey-specification-file"></a>
+</h3>
 <p>You may specify the file manually, or if you are more familiar with the ‘survey’ package (or have the R code ready) you can simply write a specification based on it:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">surveyspec</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/">survey</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">api</span><span class="op">)</span>
-
-<span class="va">dclus2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html">svydesign</a></span><span class="op">(</span><span class="op">~</span><span class="va">dnum</span><span class="op">+</span><span class="va">snum</span>, fpc<span class="op">=</span><span class="op">~</span><span class="va">fpc1</span><span class="op">+</span><span class="va">fpc2</span>, data <span class="op">=</span> <span class="va">apiclus2</span><span class="op">)</span>
-<span class="fu"><a href="reference/write_spec.html">write_spec</a></span><span class="op">(</span><span class="va">dclus2</span>, file <span class="op">=</span> <span class="st">'apiclus2.svydesign'</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span>
-<span class="co">#&gt; ids = "dnum + snum"</span>
-<span class="co">#&gt; fpc = "fpc1 + fpc2"</span>
-<span class="co">#&gt; type = "survey"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">surveyspec</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/" class="external-link">survey</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dclus2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign</a></span><span class="op">(</span><span class="op">~</span><span class="va">dnum</span><span class="op">+</span><span class="va">snum</span>, fpc<span class="op">=</span><span class="op">~</span><span class="va">fpc1</span><span class="op">+</span><span class="va">fpc2</span>, data <span class="op">=</span> <span class="va">apiclus2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/write_spec.html">write_spec</a></span><span class="op">(</span><span class="va">dclus2</span>, file <span class="op">=</span> <span class="st">'apiclus2.svydesign'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ids = "dnum + snum"</span></span>
+<span><span class="co">#&gt; fpc = "fpc1 + fpc2"</span></span>
+<span><span class="co">#&gt; type = "survey"</span></span></code></pre></div>
 </div>
-<div id="importing-a-survey-specification-file" class="section level3">
-<h3 class="hasAnchor">
-<a href="#importing-a-survey-specification-file" class="anchor"></a>Importing a survey specification file</h3>
+<div class="section level3">
+<h3 id="importing-a-survey-specification-file">Importing a survey specification file<a class="anchor" aria-label="anchor" href="#importing-a-survey-specification-file"></a>
+</h3>
 <p>To import a survey specification, you’ll need the data either loaded, or linked from the survey specification file (see below). Then, to import the survey design,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">surveyspec</span><span class="op">)</span>
-
-<span class="va">dclus2_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="va">apiclus2</span><span class="op">)</span>
-<span class="va">dclus2_spec</span>
-<span class="co">#&gt; Survey design specification:</span>
-<span class="co">#&gt;  * ids: dnum + snum</span>
-<span class="co">#&gt;  * fpc: fpc1 + fpc2</span>
-<span class="co">#&gt;  * type: survey</span>
-<span class="co">#&gt;  * survey_type: survey</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Design object: </span>
-<span class="co">#&gt; 2 - level Cluster Sampling design</span>
-<span class="co">#&gt; With (40, 126) clusters.</span>
-<span class="co">#&gt; survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)</span>
-
-<span class="va">dclus2_spec</span><span class="op">$</span><span class="va">design</span>
-<span class="co">#&gt; 2 - level Cluster Sampling design</span>
-<span class="co">#&gt; With (40, 126) clusters.</span>
-<span class="co">#&gt; survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/">survey</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html">svymean</a></span><span class="op">(</span><span class="op">~</span><span class="va">api00</span>, <span class="va">dclus2_spec</span><span class="op">$</span><span class="va">design</span><span class="op">)</span>
-<span class="co">#&gt;         mean     SE</span>
-<span class="co">#&gt; api00 670.81 30.099</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">surveyspec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dclus2_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="va">apiclus2</span><span class="op">)</span></span>
+<span><span class="va">dclus2_spec</span></span>
+<span><span class="co">#&gt; Survey design specification:</span></span>
+<span><span class="co">#&gt;  * ids: dnum + snum</span></span>
+<span><span class="co">#&gt;  * fpc: fpc1 + fpc2</span></span>
+<span><span class="co">#&gt;  * type: survey</span></span>
+<span><span class="co">#&gt;  * survey_type: survey</span></span>
+<span><span class="co">#&gt;  * calfun: linear</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Design object: </span></span>
+<span><span class="co">#&gt; 2 - level Cluster Sampling design</span></span>
+<span><span class="co">#&gt; With (40, 126) clusters.</span></span>
+<span><span class="co">#&gt; survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)</span></span>
+<span></span>
+<span><span class="va">dclus2_spec</span><span class="op">$</span><span class="va">design</span></span>
+<span><span class="co">#&gt; 2 - level Cluster Sampling design</span></span>
+<span><span class="co">#&gt; With (40, 126) clusters.</span></span>
+<span><span class="co">#&gt; survey::svydesign(ids = ~dnum + snum, fpc = ~fpc1 + fpc2, data = data)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://r-survey.r-forge.r-project.org/survey/" class="external-link">survey</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">svymean</a></span><span class="op">(</span><span class="op">~</span><span class="va">api00</span>, <span class="va">dclus2_spec</span><span class="op">$</span><span class="va">design</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         mean     SE</span></span>
+<span><span class="co">#&gt; api00 670.81 30.099</span></span></code></pre></div>
 </div>
-<div id="including-data-with-the-specification" class="section level3">
-<h3 class="hasAnchor">
-<a href="#including-data-with-the-specification" class="anchor"></a>Including data with the specification</h3>
+<div class="section level3">
+<h3 id="including-data-with-the-specification">Including data with the specification<a class="anchor" aria-label="anchor" href="#including-data-with-the-specification"></a>
+</h3>
 <p>In many cases, it makes sense to distribute the specification along with the data. In this case, the specification file can include a line <code>data = relative/path/to/data.csv</code>. It is generally advised to place these in the same folder, which can be zipped and distributed. Users can then extract both files at once into the same directory and get going. To load a file with data, you’ll need to specify a function to import the file.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'somespec.svydesign'</span>, read_fun <span class="op">=</span> <span class="va">read.csv</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'somespec.svydesign'</span>, read_fun <span class="op">=</span> <span class="va">read.csv</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="working-with-other-packages" class="section level2">
-<h2 class="hasAnchor">
-<a href="#working-with-other-packages" class="anchor"></a>Working with other packages</h2>
-<p>The ‘surveyspec’ package was initially developed as a part of <a href="https://github.com/iNZightVIT/iNZightTools/">‘iNZightTools’</a> but I extracted it into its own package to reduce dependencies. However, particularly for those new to R, the ‘iNZightTools’ package provides a useful data import function which can really make reading survey data from a variety of sources easier, including with the addition of metadata to describe value types:</p>
+<div class="section level2">
+<h2 id="working-with-other-packages">Working with other packages<a class="anchor" aria-label="anchor" href="#working-with-other-packages"></a>
+</h2>
+<p>The ‘surveyspec’ package was initially developed as a part of <a href="https://github.com/iNZightVIT/iNZightTools/" class="external-link">‘iNZightTools’</a> but I extracted it into its own package to reduce dependencies. However, particularly for those new to R, the ‘iNZightTools’ package provides a useful data import function which can really make reading survey data from a variety of sources easier, including with the addition of metadata to describe value types:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("iNZightTools")</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">apiclus2</span>, <span class="st">'apiclus2.csv'</span>, quote <span class="op">=</span> <span class="cn">FALSE</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># no need to specify `read_fun` if 'iNZightTools' is installed</span>
-<span class="va">dclus2_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="st">'apiclus2.csv'</span><span class="op">)</span></code></pre></div>
-<p>Additionally, much of the data manipulation within ‘iNZightTools’ works thanks to <a href="https://github.com/gergness/srvyr">‘srvyr’</a>, so of course you can work ‘surveyspec’ into your ‘tidyverse’ or ‘dplyr’ workflow:</p>
+<code class="sourceCode R"><span><span class="co"># install.packages("iNZightTools")</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">apiclus2</span>, <span class="st">'apiclus2.csv'</span>, quote <span class="op">=</span> <span class="cn">FALSE</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># no need to specify `read_fun` if 'iNZightTools' is installed</span></span>
+<span><span class="va">dclus2_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="st">'apiclus2.csv'</span><span class="op">)</span></span></code></pre></div>
+<p>Additionally, much of the data manipulation within ‘iNZightTools’ works thanks to <a href="https://github.com/gergness/srvyr" class="external-link">‘srvyr’</a>, so of course you can work ‘surveyspec’ into your ‘tidyverse’ or ‘dplyr’ workflow:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://gdfe.co/srvyr/">srvyr</a></span><span class="op">)</span>
-
-<span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="st">'apiclus2.csv'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="reference/as_survey.html">as_survey</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">stype</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>mean_api <span class="op">=</span> <span class="fu"><a href="http://gdfe.co/srvyr/reference/survey_mean.html">survey_mean</a></span><span class="op">(</span><span class="va">api00</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 3</span>
-<span class="co">#&gt;   stype mean_api mean_api_se</span>
-<span class="co">#&gt;   &lt;fct&gt;    &lt;dbl&gt;       &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 E         693.        29.9</span>
-<span class="co">#&gt; 2 H         598.        17.7</span>
-<span class="co">#&gt; 3 M         642.        45.1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://gdfe.co/srvyr/" class="external-link">srvyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/import_survey.html">import_survey</a></span><span class="op">(</span><span class="st">'apiclus2.svydesign'</span>, data <span class="op">=</span> <span class="st">'apiclus2.csv'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/as_survey.inzsvyspec.html">as_survey</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">stype</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>mean_api <span class="op">=</span> <span class="fu"><a href="http://gdfe.co/srvyr/reference/survey_mean.html" class="external-link">survey_mean</a></span><span class="op">(</span><span class="va">api00</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;   stype mean_api mean_api_se</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;    &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 E         693.        29.9</span></span>
+<span><span class="co">#&gt; 2 H         598.        17.7</span></span>
+<span><span class="co">#&gt; 3 M         642.        45.1</span></span></code></pre></div>
 </div>
-<div id="acknowledgements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgements" class="anchor"></a>Acknowledgements</h2>
-<p>This package has been built as part of <a href="https://terourou.org">Te Rourou Tātaritanga</a>, an informatics research project looking to improve access to data in Aoteroa, New Zealand and around the world. The project is funded by an <a href="https://www.mbie.govt.nz/">MBIE</a> Endeavour Grant, ref 62506 EDNRP.</p>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
+<p>This package has been built as part of <a href="https://terourou.org" class="external-link">Te Rourou Tātaritanga</a>, an informatics research project looking to improve access to data in Aoteroa, New Zealand and around the world. The project is funded by an <a href="https://www.mbie.govt.nz/" class="external-link">MBIE</a> Endeavour Grant, ref 62506 EDNRP.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>GPL (&gt;= 3)</small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Tom Elliott <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7815-6318" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html#citation">Citing surveyspec</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/tmelliott/surveyspec/actions"><img src="https://github.com/tmelliott/surveyspec/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/tmelliott/surveyspec?branch=main"><img src="https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="http://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="https://CRAN.R-project.org/package=surveyspec"><img src="https://www.r-pkg.org/badges/version/surveyspec" alt="CRAN"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li>Tom Elliott <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7815-6318" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/tmelliott/surveyspec/actions" class="external-link"><img src="https://github.com/tmelliott/surveyspec/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/tmelliott/surveyspec?branch=main" class="external-link"><img src="https://codecov.io/gh/tmelliott/surveyspec/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="http://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
+<li><a href="https://CRAN.R-project.org/package=surveyspec" class="external-link"><img src="https://www.r-pkg.org/badges/version/surveyspec" alt="CRAN"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Tom Elliott.</p>
+  <p></p>
+<p>Developed by Tom Elliott.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -217,6 +226,8 @@ install.packages("surveyspec")
 
   
 
+
+  
 
   </body>
 </html>
