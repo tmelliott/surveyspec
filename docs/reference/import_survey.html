@@ -22,7 +22,7 @@ weights = wt_var
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">surveyspec</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -50,9 +50,9 @@ weights = wt_var
     <div class="ref-description">
     <p>The survey information should be in TOML format, with fields
 corresponding to survey design components. For example,</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>strata =<span class="st"> </span>strata_var</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>clusters =<span class="st"> </span>cluster_var</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>weights =<span class="st"> </span>wt_var</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>strata <span class="ot">=</span> strata_var</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>clusters <span class="ot">=</span> cluster_var</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">=</span> wt_var</span></code></pre><p></p></div>
     </div>
 
     <div id="ref-usage">
@@ -101,9 +101,9 @@ component, and if <code>data</code> is supplied then also 'data' and 'design' co
     <h2>Details</h2>
     <p>For replicate weight designs, vectors (if necessary) are declared with
 square brackets, like so:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>repweights =<span class="st"> </span>[<span class="st">'w01'</span>, <span class="st">'w02'</span>, <span class="st">'w03'</span>, <span class="st">'w04'</span>, ..., <span class="st">'w20'</span>]</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repweights <span class="ot">=</span> [<span class="st">'w01'</span>, <span class="st">'w02'</span>, <span class="st">'w03'</span>, <span class="st">'w04'</span>, ..., <span class="st">'w20'</span>]</span></code></pre><p></p></div>
 <p>although this would be better expressed using a regular expression,</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>repweights =<span class="st"> '^w[0-2]'</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>repweights <span class="ot">=</span> <span class="st">'^w[0-2]'</span></span></code></pre><p></p></div>
 <p>which matches all variables starting with a <code>w</code> followed by digits between 0 and 2 (inclusive).</p>
 <p>Additionally, the information can contain a <code>file</code> specification
 indicating the path to the data, which will be imported (if it exists
@@ -129,45 +129,45 @@ multiple datasets with the same design, for example.</p>
 <p>The survey design specification file used by 'surveyspec' should be in
 <a href="https://github.com/toml-lang/toml" class="external-link">TOML</a> format.
 This allows for a very human-readable syntax,</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>arg =<span class="st"> "value"</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>arg <span class="ot">=</span> <span class="st">"value"</span></span></code></pre><p></p></div>
 <p>and additionally some additional complexity where needed (for example when specifying
 calibration information).</p>
 <p>For stratified and clustering samples, each argument to <code><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">survey::svydesign</a></code> can be
 given on its own line. So for a stratified sample using the <code>apistrat</code> data from the
 'survey' package, the following specification would suffice:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>strata =<span class="st"> "stype"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>weights =<span class="st"> "pw"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>fpc =<span class="st"> "fpc"</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>strata <span class="ot">=</span> <span class="st">"stype"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">=</span> <span class="st">"pw"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fpc <span class="ot">=</span> <span class="st">"fpc"</span></span></code></pre><p></p></div>
 <p>For a cluster sample, we instead can provide either <code>clusters</code> or <code>ids</code> (the former
 makes it more obvious to beginners, while the latter is consistent with <code><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign()</a></code>).
 For example, specifying the design for the <code>apiclus2</code> data:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>clusters =<span class="st"> "dnum + snum"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>fpc =<span class="st"> "fpc1 + fpc2"</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>clusters <span class="ot">=</span> <span class="st">"dnum + snum"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fpc <span class="ot">=</span> <span class="st">"fpc1 + fpc2"</span></span></code></pre><p></p></div>
 <p>Alternatively, survey data may be distributed with replicate weights.
 To specify this information to <code>import_survey()</code>, the same concept is used
 but the arguments supplied should be based off those used in <code><a href="https://rdrr.io/pkg/survey/man/svrepdesign.html" class="external-link">survey::svrepdesign()</a></code>.
 For example (taken from <code><a href="https://rdrr.io/pkg/survey/man/svrepdesign.html" class="external-link">?svrepdesign</a></code>):</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>weights =<span class="st"> "pw"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>repweights =<span class="st"> "wt[1-9]+"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>type =<span class="st"> "JK1"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>scale =<span class="st"> "~(1-15/757)*14/15"</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>combined =<span class="st"> </span><span class="ot">FALSE</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">=</span> <span class="st">"pw"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>repweights <span class="ot">=</span> <span class="st">"wt[1-9]+"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>type <span class="ot">=</span> <span class="st">"JK1"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>scale <span class="ot">=</span> <span class="st">"~(1-15/757)*14/15"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>combined <span class="ot">=</span> <span class="cn">FALSE</span></span></code></pre><p></p></div>
 <p>Note here that you can specify an expression for <code>scale</code>, but need to use
 this syntax, "~expr", for it to be parsed correctly.</p>
 <p>Finally, survey design calibration can be performed by including this information
 using TOML list syntax. For example, to calibrate the 'apistrat' data,</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>strata =<span class="st"> "stype"</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>weights =<span class="st"> "pw"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>fpc =<span class="st"> "fpc"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>[calibrate.stype]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>E =<span class="st"> </span><span class="dv">4421</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>H =<span class="st"> </span><span class="dv">755</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>M =<span class="st"> </span><span class="dv">1018</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>[calibrate.<span class="st">"sch.wide"</span>]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="st">"No"</span> =<span class="st"> </span><span class="dv">1072</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="st">"Yes"</span> =<span class="st"> </span><span class="dv">5122</span></span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>strata <span class="ot">=</span> <span class="st">"stype"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">=</span> <span class="st">"pw"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fpc <span class="ot">=</span> <span class="st">"fpc"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>[calibrate.stype]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>E <span class="ot">=</span> <span class="dv">4421</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>H <span class="ot">=</span> <span class="dv">755</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>M <span class="ot">=</span> <span class="dv">1018</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>[calibrate.<span class="st">"sch.wide"</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">"No"</span> <span class="ot">=</span> <span class="dv">1072</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">"Yes"</span> <span class="ot">=</span> <span class="dv">5122</span></span></code></pre><p></p></div>
 <p>Note importantly the use of quotes around variable names which include a period (.),
 here <code>sch.wide</code>. Currently, only calibrating by a factor is possible.</p>
     </div>

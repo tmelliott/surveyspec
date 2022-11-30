@@ -1,8 +1,8 @@
-pandoc: 2.9.2.1
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-11-30T01:23Z
+last_built: 2022-11-30T01:35Z
 urls:
   reference: https://tomelliott.co.nz/surveyspec/reference
   article: https://tomelliott.co.nz/surveyspec/articles
