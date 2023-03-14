@@ -1,12 +1,15 @@
 Package: surveyspec
 Title: Survey Design Specification Format
 Version: 0.1.1
-Authors@R:
+Authors@R: c(
     person(given = "Tom",
            family = "Elliott",
            role = c("aut", "cre"),
            email = "tom.elliott@auckland.ac.nz",
-           comment = c(ORCID = "0000-0002-7815-6318"))
+           comment = c(ORCID = "0000-0002-7815-6318")),
+    person(given = "Te Rourou Tātaritanga",
+           role = "fnd")
+    )
 Description: Provides a set of functions for working with design specification files, making it easier to share and load survey designs with R.
 License: GPL (>= 3)
 Encoding: UTF-8
